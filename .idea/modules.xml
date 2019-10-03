@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/RCS.iml" filepath="$PROJECT_DIR$/.idea/RCS.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/bluetooth/bluetooth.iml" filepath="$PROJECT_DIR$/src/bluetooth/bluetooth.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/json/json.iml" filepath="$PROJECT_DIR$/src/json/json.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/robot-definition/robot-definition.iml" filepath="$PROJECT_DIR$/src/robot-definition/robot-definition.iml" />
     </modules>
   </component>
 </project>

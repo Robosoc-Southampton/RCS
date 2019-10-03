@@ -1,0 +1,35 @@
+{
+  "name": "LED",
+  "attributes": [
+    {
+      "name": "initial",
+      "default": 0
+    },
+    {
+      "name": "pin",
+      "default": 13
+    }
+  ],
+  "methods": [
+    {
+      "name": "write",
+      "parameters": ["on"],
+      "returns": false
+    },
+    {
+      "name": "on",
+      "parameters": [],
+      "returns": false
+    },
+    {
+      "name": "off",
+      "parameters": [],
+      "returns": false
+    },
+    {
+      "name": "toggle",
+      "parameters": [],
+      "returns": false
+    }
+  ]
+}

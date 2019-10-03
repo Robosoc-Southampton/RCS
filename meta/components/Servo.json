@@ -1,0 +1,28 @@
+{
+  "name": "Servo",
+  "attributes": [
+    {
+      "name": "initial",
+      "default": 0
+    },
+    {
+      "name": "pin",
+      "default": 0
+    },
+    {
+      "name": "min",
+      "default": 0
+    },
+    {
+      "name": "max",
+      "default": 180
+    }
+  ],
+  "methods": [
+    {
+      "name": "write",
+      "parameters": ["angle"],
+      "returns": false
+    }
+  ]
+}

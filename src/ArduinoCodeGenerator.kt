@@ -1,29 +1,29 @@
 import java.nio.file.Files
 import java.nio.file.Paths
 
-class CodeGenerator(
+class ArduinoCodeGenerator(
         private val robot: RobotDefinition,
         private val components: List<ComponentSourceDefinition>
 ) {
     fun buildCompileFolder(folder: String) {
-        val generator = CPPGenerator()
+        val generator = CPPCodeGenerator()
 
         makeFolder(folder)
-        makeFolder("$folder/robot")
-        makeFolder("$folder/robot/include")
+        makeFolder("$folder/arduino")
+        makeFolder("$folder/arduino/include")
 
         components.forEach { (c, header, source) ->
-            writeFile("$folder/robot/include/component_${c.name}.h", header)
+            writeFile("$folder/arduino/include/component_${c.name}.h", header)
             generator.includes("include/component_${c.name}")
-            writeFile("$folder/robot/component_${c.name}.cpp",
+            writeFile("$folder/arduino/component_${c.name}.cpp",
                     "#include \"include/component_${c.name}.h\"\n$source")
         }
 
         writeMainFile(generator)
-        writeFile("$folder/robot/robot.ino", generator.toString())
+        writeFile("$folder/arduino/arduino.ino", generator.toString())
     }
 
-    private fun writeMainFile(generator: CPPGenerator) {
+    private fun writeMainFile(generator: CPPCodeGenerator) {
         robot.components.forEach {
             generator.global(it.name, it.type)
         }
@@ -53,8 +53,8 @@ class CodeGenerator(
 
         generator.loop {
             statement("if (Serial.available() < 2) return")
-            statement("int length = readInteger()")
-            statement("while (Serial.available() < length)")
+            statement("int getLength = readInteger()")
+            statement("while (Serial.available() < getLength)")
             statement("int opcode = readInteger()")
 
             block("if (opcode == $CALL_INSTRUCTION)") {

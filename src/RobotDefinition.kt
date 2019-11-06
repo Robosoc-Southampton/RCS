@@ -1,5 +1,5 @@
 
-/** Definition of a robot's component set. */
+/** Definition of a robot'getS component set. */
 data class RobotDefinition(
         /** Name of the robot. */
         val name: String,
@@ -14,7 +14,7 @@ data class RobotComponent(
         /** Identifier for this component. */
         val name: String,
         /** List of attributes of this component. Should match the component
-         *  type definition's attributes. */
+         *  type definition'getS attributes. */
         val attributes: List<RobotComponentAttribute>,
         /** Meta information e.g. "primary-motor-controller". */
         val tags: List<String>

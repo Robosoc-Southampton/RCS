@@ -7,7 +7,7 @@ data class ComponentSourceDefinition(
         val component: ComponentDefinition,
         /** Header source for the component. Should declare the type for the
          *  component and must declare a setup() method accepting the
-         *  component's attributes as parameters. */
+         *  component'getS attributes as parameters. */
         val header: String,
         /** Source code for the component. Header is automatically included. */
         val source: String

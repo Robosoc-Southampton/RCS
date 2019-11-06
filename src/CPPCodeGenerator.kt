@@ -1,5 +1,5 @@
 
-class CPPGenerator {
+class CPPCodeGenerator {
     private val includes: MutableList<String> = mutableListOf()
     private val globals: MutableList<String> = mutableListOf()
     private val functions: MutableList<String> = mutableListOf()

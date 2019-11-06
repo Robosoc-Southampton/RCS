@@ -3,9 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/RCS.iml" filepath="$PROJECT_DIR$/.idea/RCS.iml" />
-      <module fileurl="file://$PROJECT_DIR$/src/rcs-gen/rcs-gen.iml" filepath="$PROJECT_DIR$/src/rcs-gen/rcs-gen.iml" />
-      <module fileurl="file://$PROJECT_DIR$/src/robot-definition/robot-definition.iml" filepath="$PROJECT_DIR$/src/robot-definition/robot-definition.iml" />
-      <module fileurl="file://$PROJECT_DIR$/src/types/types.iml" filepath="$PROJECT_DIR$/src/types/types.iml" />
     </modules>
   </component>
 </project>

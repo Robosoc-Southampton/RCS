@@ -36,8 +36,6 @@ fun loadComponentDefinition(path: String): ComponentDefinition {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-val jsonDecodeComponentValue: JSONDecoder<ComponentValue> = jsonDecodeInteger
-
 val jsonDecodeComponentDefinition = jsonDecodeObject {
     val name = "name" / jsonDecodeString
     val attributes = "attributes" / jsonDecodeArray(jsonDecodeComponentAttributeDefinition)

@@ -1,0 +1,23 @@
+{
+  "name": "L298",
+  "attributes": [
+    { "name": "IN1" },
+    { "name": "IN2" },
+    { "name": "IN3" },
+    { "name": "IN4" },
+    { "name": "ENA" },
+    { "name": "ENB" }
+  ],
+  "methods": [
+    {
+      "name": "setLeftMotorSpeed",
+      "parameters": ["speed"],
+      "returns": false
+    },
+    {
+      "name": "setRightMotorSpeed",
+      "parameters": ["speed"],
+      "returns": false
+    }
+  ]
+}

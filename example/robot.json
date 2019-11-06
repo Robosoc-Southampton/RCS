@@ -1,0 +1,42 @@
+{
+  "name": "example-robot",
+  "components": [
+    {
+      "type": "L298",
+      "name": "motors",
+      "attributes": [
+        {
+          "name": "ENA",
+          "value": 5
+        },
+        {
+          "name": "ENB",
+          "value": 6
+        },
+        {
+          "name": "IN1",
+          "value": 8
+        },
+        {
+          "name": "IN2",
+          "value": 9
+        },
+        {
+          "name": "IN3",
+          "value": 10
+        },
+        {
+          "name": "IN4",
+          "value": 11
+        }
+      ],
+      "tags": []
+    },
+    {
+      "type": "LED",
+      "name": "led",
+      "attributes": [],
+      "tags": []
+    }
+  ]
+}

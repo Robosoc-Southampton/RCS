@@ -1,11 +1,8 @@
 
-/** A value given to components as attributes or method parameters. */
-typealias ComponentValue = Int
-
 /** Definition of a component type, e.g. a servo. */
 data class ComponentDefinition(
         /** Name of the component */
-        val name: String,
+        val name: ComponentID,
         /** Attributes of the component (i.e. parameters/configuration) */
         val attributes: List<ComponentAttributeDefinition>,
         /** Methods that may be called upon an instance of this component type. */
@@ -23,12 +20,19 @@ data class ComponentAttributeDefinition(
 /** Definition of a method on a component type. */
 data class ComponentMethodDefinition(
         /** Name of the method. */
-        val name: String,
+        val name: MethodID,
         /** Names of the parameters to this method. */
         val parameters: List<String>,
         /** Whether the method returns any information. */
         val returns: Boolean
 )
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+/** Load a component definition from a file. */
+fun loadComponentDefinition(path: String): ComponentDefinition {
+    return readJSONFile(path, jsonDecodeComponentDefinition)
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,7 +48,7 @@ val jsonDecodeComponentDefinition = jsonDecodeObject {
 
 val jsonDecodeComponentAttributeDefinition = jsonDecodeObject {
     val name = "name" / jsonDecodeString
-    val defaultValue = "default" / jsonDecodeOptional(jsonDecodeComponentValue)
+    val defaultValue = decodeOptionalEntry("default", jsonDecodeOptional(jsonDecodeComponentValue))
 
     ComponentAttributeDefinition(name, defaultValue)
 }

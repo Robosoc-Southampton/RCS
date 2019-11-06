@@ -2,12 +2,12 @@
   "name": "LED",
   "attributes": [
     {
-      "name": "initial",
-      "default": 0
-    },
-    {
       "name": "pin",
       "default": 13
+    },
+    {
+      "name": "initial",
+      "default": 0
     }
   ],
   "methods": [

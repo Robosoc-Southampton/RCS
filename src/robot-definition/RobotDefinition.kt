@@ -30,6 +30,13 @@ data class RobotComponentAttribute(
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
+/** Load a robot definition from a file. */
+fun loadRobotDefinition(path: String): RobotDefinition {
+    return readJSONFile(path, jsonDecodeRobotDefinition)
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
 val jsonDecodeRobotDefinition = jsonDecodeObject {
     val name = "name" / jsonDecodeString
     val components = "components" / jsonDecodeArray(jsonDecodeRobotComponent)

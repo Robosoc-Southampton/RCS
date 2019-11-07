@@ -67,9 +67,7 @@ A robot definition has the following format:
 ```json
 {
   "name": "<name>",
-  "components": [
-    <components...>
-  ]
+  "components": []
 }
 ```
 
@@ -82,10 +80,10 @@ A component within a robot has the following format:
   "attributes": [
     {
       "name": "<attribute name>",
-      "value": <attribute value>,
+      "value": 1234
     }
   ],
-  "tags": ["<tag 1>", "<tag 2>", ...]
+  "tags": ["<tag 1>", "<tag 2>"]
 }
 ```
 
@@ -104,12 +102,8 @@ The configuration has the following format:
 ```json
 {
   "name": "<component type>",
-  "attributes": [
-    <attribute definitions...>
-  ],
-  "methods": [
-    <method definitions...>
-  ]
+  "attributes": [],
+  "methods": []
 }
 ```
 
@@ -118,8 +112,12 @@ Where an attribute definition has the following format:
 ```json
 {
   "name": "<attribute name>",
-  "default": <optional default value>
+  "default": 1234
 }
+```
+
+```json
+{ "name": "<attribute name>" }
 ```
 
 And a method definition has the following format:
@@ -127,8 +125,8 @@ And a method definition has the following format:
 ```json
 {
   "name": "<method name>",
-  "parameters": ["<parameter 1 name>", "<parameter 2 name>", ...],
-  "returns": <true|false>
+  "parameters": ["<parameter 1 name>", "<parameter 2 name>"],
+  "returns": true
 }
 ```
 

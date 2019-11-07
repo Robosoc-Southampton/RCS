@@ -1,8 +1,6 @@
 import observables.Observable
 import observables.Signal
 
-// TODO: control handles should have a connect and disconnect() ?
-
 /**
  * A control handle is an abstraction of an entity's control of a robot.
  *
@@ -19,22 +17,16 @@ import observables.Signal
  * A ControlHandle has an observable position variable, tracking the robot's
  * current position. This may be set at any time to update the robot's position.
  *
- * A ControlHandle has 2 signals:
+ * A ControlHandle has 3 signals:
  *  * commandSubmitted(CommandHandle)
  *  * info(String)
+ *  * disconnected(Boolean)
  *
  * Along with 4 command methods:
  *  * wait(Milliseconds)
  *  * forward(Millimetres)
  *  * turn(Degrees)
  *  * call(ComponentID, MethodID, ComponentValue...)
- *
- * Implementing a control handle requires:
- * * Implementing the command methods (these should update position correctly).
- * * Handling position updates properly.
- * * Emitting commandSubmitted when appropriate.
- * * Emitting info when appropriate.
- * * Updating command handle feedback.
  */
 abstract class ControlHandle {
     /** Signal emitted when a command is submitted to the robot, not necessarily
@@ -45,9 +37,22 @@ abstract class ControlHandle {
      *  the robot. */
     val info = Signal<String>()
 
+    /** Signal emitted when the connection is lost, with a parameter indicating
+     *  whether the remote connection was lost or the direct one. I.e., if true,
+     *  the bluetooth connection may have dropped, but if false, the TCP socket
+     *  may have been closed. */
+    val disconnected = Signal<Boolean>()
+
     /** The current location of the robot being controlled.
      *  Connect to position.changed for position updates. */
     val position = Observable(RobotPosition(Location()))
+
+    /** Connect to the robot. Will attempt to re-establish the remote connection
+     *  if already connected to an adapter. */
+    abstract fun connect()
+
+    /** Disconnect from the robot. Will emit the disconnected signal. */
+    abstract fun disconnect()
 
     /** Wait by the specified time in milliseconds. */
     abstract fun wait(
@@ -64,17 +69,10 @@ abstract class ControlHandle {
      *  if applicable. */
     abstract fun call(
             component: ComponentID,
+            componentIndex: Int,
             method: MethodID,
-            vararg parameters: ComponentValue,
-            fn: CallCommandHandle.() -> Unit = {}
-    )
-
-    /** Call a method on a component on the robot, returning anything it returns
-     *  if applicable. */
-    fun call(
-            component: ComponentID,
-            method: MethodID,
+            methodIndex: Int,
             parameters: List<ComponentValue>,
             fn: CallCommandHandle.() -> Unit = {}
-    ) = call(component, method, *parameters.toIntArray(), fn=fn)
+    )
 }

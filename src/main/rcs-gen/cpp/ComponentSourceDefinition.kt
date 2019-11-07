@@ -1,3 +1,10 @@
+package cpp
+
+import ComponentDefinition
+import jsonDecodeComponentDefinition
+import readFile
+import readJSONFile
+
 /** Definition of a component type along with its source code. */
 data class ComponentSourceDefinition(
         /** Component definition. */

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/RCS.iml" filepath="$PROJECT_DIR$/.idea/RCS.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/lib/kotlin/lib-kotlin.iml" filepath="$PROJECT_DIR$/src/lib/kotlin/lib-kotlin.iml" />
       <module fileurl="file://$PROJECT_DIR$/out/mlem/kt/out.iml" filepath="$PROJECT_DIR$/out/mlem/kt/out.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/rcs-bluetooth-adapter/rcs-bluetooth-adapter.iml" filepath="$PROJECT_DIR$/src/main/rcs-bluetooth-adapter/rcs-bluetooth-adapter.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/main/rcs-gen/rcs-gen.iml" filepath="$PROJECT_DIR$/src/main/rcs-gen/rcs-gen.iml" />
     </modules>
   </component>

@@ -17,9 +17,9 @@ Usage:
 
 ```
 rcs-gen
-    [-ga <arduino output path>]
-    [-gk <kotlin file path>]
-    [-gp <python file path>]
+    [-ga <arduino output folder path>]
+    [-gk <kotlin output folder path>]
+    [-gp <python output folder path>]
     <robot.json>
     <component definition paths...>
 ```

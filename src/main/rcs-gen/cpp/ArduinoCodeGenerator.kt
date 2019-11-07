@@ -1,3 +1,11 @@
+package cpp
+
+import CALL_INSTRUCTION
+import CompilationError
+import ComponentDefinition
+import ComponentID
+import MAX_METHODS_PER_COMPONENT
+import RobotDefinition
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -6,7 +14,7 @@ class ArduinoCodeGenerator(
         private val components: List<ComponentSourceDefinition>
 ) {
     fun buildCompileFolder(folder: String) {
-        val generator = CPPCodeGenerator()
+        val generator = CPPCodeBuilder()
 
         makeFolder(folder)
         makeFolder("$folder/arduino")
@@ -23,7 +31,7 @@ class ArduinoCodeGenerator(
         writeFile("$folder/arduino/arduino.ino", generator.toString())
     }
 
-    private fun writeMainFile(generator: CPPCodeGenerator) {
+    private fun writeMainFile(generator: CPPCodeBuilder) {
         robot.components.forEach {
             generator.global(it.name, it.type)
         }

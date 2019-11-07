@@ -104,7 +104,7 @@ class ArduinoCodeGenerator(
 
     private fun makeFolder(folder: String) {
         val path = Paths.get(folder)
-//        if (Files.exists(path)) Files.delete(path)
+        // if (Files.exists(path)) Files.delete(path)
         Files.createDirectories(path)
     }
 

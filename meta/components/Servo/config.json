@@ -1,12 +1,11 @@
 {
-  "name": "Servo",
+  "name": "RCSServo",
   "attributes": [
     {
-      "name": "initial",
-      "default": 0
+      "name": "pin"
     },
     {
-      "name": "pin",
+      "name": "initial",
       "default": 0
     },
     {

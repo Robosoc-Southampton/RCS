@@ -1,6 +1,3 @@
-import java.nio.file.Files
-import java.nio.file.Paths
-
 /** Definition of a component type along with its source code. */
 data class ComponentSourceDefinition(
         /** Component definition. */

@@ -55,39 +55,53 @@ class KotlinCodeGenerator(
                             "(this, \"${component.name}\", $index)", true)
                 }
 
-                mutableField("_connection", "null as Socket?")
+                mutableField("_adapter", "null as AdapterClient?")
 
-                overrideMethod("connect", "Unit") {
-                    writeLine("if (_connection == null)\n" +
-                            "\t_connection = Socket(InetAddress.getByName(addr), port)")
+                method("send", "Unit",
+                        "data" to "Command") {
+                    writeLine("_adapter?.send(data)")
                 }
 
-                overrideMethod("disconnect", "Unit") {
-                    writeLine("val c = _connection")
-                    block("if (c != null)") {
-                        block("synchronized(c)") {
-                            writeLine("c.close()")
+                overrideMethod("connect", "Unit") {
+                    block("if (_adapter == null)") {
+                        writeLine("val socket = Socket(InetAddress.getByName(addr), port)")
+                        writeLine("val adapter = AdapterClient(socket)")
+                        writeLine("_adapter = adapter")
+
+                        block("adapter.disconnected.connect") {
                             writeLine("disconnected.emit(false)")
+                            writeLine("if (adapter == _adapter) _adapter = null")
+                        }
+
+                        block("adapter.commandSubmitted.connect") {
+                            block("when (it)") {
+                                writeLine("is InfoCommand -> info.emit(it.info)")
+                                writeLine("is DisconnectCommand -> disconnected.emit(true)")
+                                writeLine("is PositionCommand -> position.value(it.position)")
+                            }
+
+                            writeLine("commandSubmitted.emit(it)")
                         }
                     }
                 }
 
-                overrideMethod("wait", "Unit",
-                        "delay" to "Milliseconds",
-                        "fn" to "WaitCommandHandle.() -> Unit") {
+                overrideMethod("disconnect", "Unit") {
+                    writeLine("_adapter?.disconnect()")
+                }
 
+                overrideMethod("wait", "Unit",
+                        "delay" to "Milliseconds") {
+                    writeLine("send(WaitCommand(delay))")
                 }
 
                 overrideMethod("forward", "Unit",
-                        "distance" to "Millimetres",
-                        "fn" to "ForwardCommandHandle.() -> Unit") {
-
+                        "distance" to "Millimetres") {
+                    writeLine("send(ForwardCommand(distance))")
                 }
 
                 overrideMethod("turn", "Unit",
-                        "angle" to "Degrees",
-                        "fn" to "TurnCommandHandle.() -> Unit") {
-
+                        "angle" to "Degrees") {
+                    writeLine("send(TurnCommand(angle))")
                 }
 
                 overrideMethod("call", "Unit",
@@ -95,8 +109,8 @@ class KotlinCodeGenerator(
                         "componentIndex" to "Int",
                         "method" to "MethodID",
                         "methodIndex" to "Int",
-                        "parameters" to "List<ComponentValue>",
-                        "fn" to "CallCommandHandle.() -> Unit") {
+                        "parameters" to "List<ComponentValue>") {
+                    writeLine("send(CallCommand(component, componentIndex, method, methodIndex, parameters))")
                 }
             }
         }

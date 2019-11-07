@@ -40,16 +40,16 @@ class KotlinClassBuilder(
     }
 
     fun method(name: String, returns: String, vararg parameters: Pair<String, String>,
-               fn: KotlinBlockGenerator.() -> Unit) {
-        val generator = KotlinBlockGenerator()
+               fn: KotlinBlockBuilder.() -> Unit) {
+        val generator = KotlinBlockBuilder()
         fn(generator)
         methods.add("fun $name(${parameters.joinToString { (n, t) -> "$n: $t" }}): $returns {" +
                 "\n\t${generator.toString().replace("\n", "\n\t")}\n}")
     }
 
     fun overrideMethod(name: String, returns: String, vararg parameters: Pair<String, String>,
-               fn: KotlinBlockGenerator.() -> Unit) {
-        val generator = KotlinBlockGenerator()
+               fn: KotlinBlockBuilder.() -> Unit) {
+        val generator = KotlinBlockBuilder()
         fn(generator)
         methods.add("override fun $name(${parameters.joinToString { (n, t) -> "$n: $t" }}): $returns {" +
                 "\n\t${generator.toString().replace("\n", "\n\t")}\n}")
@@ -67,20 +67,20 @@ class KotlinClassBuilder(
     }
 }
 
-class KotlinBlockGenerator {
+class KotlinBlockBuilder {
     private val output = StringBuilder()
 
     fun writeLine(s: String) {
         output.append("$s\n")
     }
 
-    fun block(s: String, fn: KotlinBlockGenerator.() -> Unit) {
-        val generator = KotlinBlockGenerator()
+    fun block(s: String, fn: KotlinBlockBuilder.() -> Unit) {
+        val generator = KotlinBlockBuilder()
         fn(generator)
         output.append(s)
         output.append(" {\n\t${generator
                 .toString()
-                .replace("\n", "\n\t")}\n}")
+                .replace("\n", "\n\t")}\n}\n\n")
     }
 
     override fun toString() = output.toString().trim()

@@ -8,8 +8,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
-    <orderEntry type="library" name="json-kt-dev" level="application" />
-    <orderEntry type="library" name="pcom" level="application" />
-    <orderEntry type="library" name="observables" level="application" />
+    <orderEntry type="library" exported="" name="json-kt-dev" level="application" />
+    <orderEntry type="library" exported="" name="pcom" level="application" />
+    <orderEntry type="library" exported="" name="observables" level="application" />
   </component>
 </module>

@@ -31,7 +31,7 @@ import observables.Signal
 abstract class ControlHandle {
     /** Signal emitted when a command is submitted to the robot, not necessarily
      *  by this control handle. */
-    val commandSubmitted = Signal<CommandHandle>()
+    val commandSubmitted = Signal<Command>()
 
     /** Signal emitted when arbitrary non-functional information is fed back by
      *  the robot. */
@@ -55,15 +55,13 @@ abstract class ControlHandle {
     abstract fun disconnect()
 
     /** Wait by the specified time in milliseconds. */
-    abstract fun wait(
-            delay: Milliseconds, fn: WaitCommandHandle.() -> Unit = {})
+    abstract fun wait(delay: Milliseconds)
 
     /** Move the robot forward by `distance`. */
-    abstract fun forward(
-            distance: Millimetres, fn: ForwardCommandHandle.() -> Unit = {})
+    abstract fun forward(distance: Millimetres)
 
     /** Turn the robot `angle` degrees counter-clockwise. */
-    abstract fun turn(angle: Degrees, fn: TurnCommandHandle.() -> Unit = {})
+    abstract fun turn(angle: Degrees)
 
     /** Call a method on a component on the robot, returning anything it returns
      *  if applicable. */
@@ -72,7 +70,6 @@ abstract class ControlHandle {
             componentIndex: Int,
             method: MethodID,
             methodIndex: Int,
-            parameters: List<ComponentValue>,
-            fn: CallCommandHandle.() -> Unit = {}
+            parameters: List<ComponentValue>
     )
 }

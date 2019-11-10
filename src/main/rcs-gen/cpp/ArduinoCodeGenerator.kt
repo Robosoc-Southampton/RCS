@@ -1,19 +1,28 @@
 package cpp
 
 import CALL_INSTRUCTION
+import CallCommand
+import Command
 import CompilationError
 import ComponentDefinition
 import ComponentID
+import ForwardCommand
 import MAX_METHODS_PER_COMPONENT
 import RobotDefinition
+import TurnCommand
+import WaitCommand
 import java.nio.file.Files
 import java.nio.file.Paths
 
+/** TODO: Robot configuration e.g. wheel radius, wheel separation
+ *        Motor controller usage code generation
+ *        Collision avoidance code generation
+ */
 class ArduinoCodeGenerator(
         private val robot: RobotDefinition,
         private val components: List<ComponentSourceDefinition>
 ) {
-    fun buildCompileFolder(folder: String) {
+    fun buildCompileFolder(folder: String, loopBodyBuilder: CPPBlockBuilder.() -> Unit) {
         val generator = CPPCodeBuilder()
 
         makeFolder(folder)
@@ -27,11 +36,72 @@ class ArduinoCodeGenerator(
                     "#include \"include/component_${c.name}.h\"\n$source")
         }
 
-        writeMainFile(generator)
+        writeMainFile(generator, loopBodyBuilder)
         writeFile("$folder/arduino/arduino.ino", generator.toString())
     }
 
-    private fun writeMainFile(generator: CPPCodeBuilder) {
+    fun staticArduinoLoop(routine: List<Command>): CPPBlockBuilder.() -> Unit = {
+        // TODO: actually fix this
+        //  values are floats and need to be rounded to ints
+        routine.forEach {when(val cmd = it) {
+            is WaitCommand -> statement("delay(${cmd.delay})")
+            is ForwardCommand -> statement("forward(${cmd.distance})")
+            is TurnCommand -> statement("turn(${cmd.angle})")
+            is CallCommand -> statement("${cmd.component}.${cmd.method}(${cmd.parameters.joinToString()})")
+        } }
+    }
+
+    val serialProtocolArduinoLoop: CPPBlockBuilder.() -> Unit = {
+        statement("if (Serial.available() < 2) return")
+        statement("int getLength = readInteger()")
+        statement("while (Serial.available() < getLength)")
+        statement("int opcode = readInteger()")
+
+        block("if (opcode == $CALL_INSTRUCTION)") {
+            statement("int idx = readInteger()")
+
+            robot.components.forEachIndexed { i, component ->
+                val componentType = componentTypeLookup[component.type]!!
+                val methods = componentType.methods
+
+                methods.forEachIndexed { mi, method ->
+                    val idx = i * MAX_METHODS_PER_COMPONENT + mi
+
+                    method.parameters.forEach {
+                        statement("int16_t p_${idx}_$it")
+                    }
+                }
+            }
+
+            block("switch (idx)") {
+                robot.components.forEachIndexed { i, component ->
+                    val componentType = componentTypeLookup[component.type]!!
+                    val methods = componentType.methods
+
+                    methods.forEachIndexed { mi, method ->
+                        val idx = i * MAX_METHODS_PER_COMPONENT + mi
+                        writeLine("case $idx:")
+
+                        method.parameters.forEach {
+                            statement("p_${idx}_$it = readInteger()")
+                        }
+
+                        if (method.returns) {
+
+                        }
+                        else {
+                            statement("${component.name}.${method.name}(" +
+                                    method.parameters.map { "p_${idx}_$it" } .joinToString() + ")")
+                        }
+
+                        statement("break")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun writeMainFile(generator: CPPCodeBuilder, loopBodyBuilder: CPPBlockBuilder.() -> Unit) {
         robot.components.forEach {
             generator.global(it.name, it.type)
         }
@@ -59,55 +129,7 @@ class ArduinoCodeGenerator(
             }
         }
 
-        generator.loop {
-            statement("if (Serial.available() < 2) return")
-            statement("int getLength = readInteger()")
-            statement("while (Serial.available() < getLength)")
-            statement("int opcode = readInteger()")
-
-            block("if (opcode == $CALL_INSTRUCTION)") {
-                statement("int idx = readInteger()")
-
-                robot.components.forEachIndexed { i, component ->
-                    val componentType = componentTypeLookup[component.type]!!
-                    val methods = componentType.methods
-
-                    methods.forEachIndexed { mi, method ->
-                        val idx = i * MAX_METHODS_PER_COMPONENT + mi
-
-                        method.parameters.forEach {
-                            statement("int16_t p_${idx}_$it")
-                        }
-                    }
-                }
-
-                block("switch (idx)") {
-                    robot.components.forEachIndexed { i, component ->
-                        val componentType = componentTypeLookup[component.type]!!
-                        val methods = componentType.methods
-
-                        methods.forEachIndexed { mi, method ->
-                            val idx = i * MAX_METHODS_PER_COMPONENT + mi
-                            writeLine("case $idx:")
-
-                            method.parameters.forEach {
-                                statement("p_${idx}_$it = readInteger()")
-                            }
-
-                            if (method.returns) {
-
-                            }
-                            else {
-                                statement("${component.name}.${method.name}(" +
-                                        method.parameters.map { "p_${idx}_$it" } .joinToString() + ")")
-                            }
-
-                            statement("break")
-                        }
-                    }
-                }
-            }
-        }
+        generator.loop(loopBodyBuilder)
     }
 
     private fun makeFolder(folder: String) {

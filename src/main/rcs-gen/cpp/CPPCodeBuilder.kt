@@ -29,27 +29,27 @@ class CPPCodeBuilder {
     }
 
     fun function(name: String, returns: String, vararg parameters: Pair<String, String>,
-                 fn: CPPBlockGenerator.() -> Unit) {
-        val generator = CPPBlockGenerator()
+                 fn: CPPBlockBuilder.() -> Unit) {
+        val generator = CPPBlockBuilder()
         fn(generator)
         functions.add("$returns $name(${parameters.joinToString { (t, n) -> "$t $n" }}) {" +
                 "\n\t${generator.toString().replace("\n", "\n\t")}\n}")
     }
 
-    fun setup(fn: CPPBlockGenerator.() -> Unit) {
-        val generator = CPPBlockGenerator()
+    fun setup(fn: CPPBlockBuilder.() -> Unit) {
+        val generator = CPPBlockBuilder()
         fn(generator)
         setup.add(generator.toString())
     }
 
-    fun loop(fn: CPPBlockGenerator.() -> Unit) {
-        val generator = CPPBlockGenerator()
+    fun loop(fn: CPPBlockBuilder.() -> Unit) {
+        val generator = CPPBlockBuilder()
         fn(generator)
         loop.add(generator.toString())
     }
 
-    fun isr(fn: CPPBlockGenerator.() -> Unit) {
-        val generator = CPPBlockGenerator()
+    fun isr(fn: CPPBlockBuilder.() -> Unit) {
+        val generator = CPPBlockBuilder()
         fn(generator)
         isrs.add(generator.toString())
     }
@@ -63,7 +63,7 @@ class CPPCodeBuilder {
               "ISR(TIMER2_COMPA_vect) {\n\t${isrs.joinToString("\n\n").replace("\n", "\n\t")}\n}"
 }
 
-class CPPBlockGenerator {
+class CPPBlockBuilder {
     private val output = StringBuilder()
 
     fun writeLine(s: String) {
@@ -74,8 +74,8 @@ class CPPBlockGenerator {
         output.append("$s;\n")
     }
 
-    fun block(s: String, fn: CPPBlockGenerator.() -> Unit) {
-        val generator = CPPBlockGenerator()
+    fun block(s: String, fn: CPPBlockBuilder.() -> Unit) {
+        val generator = CPPBlockBuilder()
         fn(generator)
         output.append(s)
         output.append(" {\n\t${generator

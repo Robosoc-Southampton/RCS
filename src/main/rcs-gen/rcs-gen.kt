@@ -1,9 +1,11 @@
 import cpp.ArduinoCodeGenerator
 import cpp.ComponentSourceDefinition
+import cpp.StaticRoutineReader
 import cpp.loadComponentSourceDefinition
 import kt.KotlinCodeGenerator
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.concurrent.CyclicBarrier
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
@@ -13,12 +15,30 @@ fun main(args: Array<String>) {
 
     if (arguments.arduinoOutputPath != null) {
         val gen = ArduinoCodeGenerator(robot, components)
-        gen.buildCompileFolder(arguments.arduinoOutputPath)
+        gen.buildCompileFolder(arguments.arduinoOutputPath, gen.serialProtocolArduinoLoop)
     }
 
     if (arguments.kotlinOutputPath != null) {
         val gen = KotlinCodeGenerator(robot, components.map { it.component })
         gen.buildControllerFiles(arguments.kotlinOutputPath)
+    }
+
+    if (arguments.staticOutputPath != null) {
+        val gen = ArduinoCodeGenerator(robot, components)
+        val port = 1234
+        val staticRoutine = StaticRoutineReader(port)
+
+        println("Hosting adapter on localhost:$port\nConnect and run commands to generate static routine")
+
+        val b = CyclicBarrier(2)
+
+        staticRoutine.submitted.connect { routine ->
+            println("Generating with ${routine.size} commands")
+            gen.buildCompileFolder(arguments.staticOutputPath, gen.staticArduinoLoop(routine))
+            b.await()
+        }
+
+        b.await()
     }
 }
 
@@ -27,7 +47,8 @@ class GenerationParameters(
         val componentConfigPaths: Set<String>,
         val arduinoOutputPath: String?,
         val pythonOutputPath: String?,
-        val kotlinOutputPath: String?
+        val kotlinOutputPath: String?,
+        val staticOutputPath: String?
 )
 
 enum class GenerationTarget {
@@ -55,8 +76,9 @@ private fun parseArguments(args: Array<String>): GenerationParameters {
     val genPython = argValue("-gp")
     val genKotlin = argValue("-gk")
     val genArduino = argValue("-ga")
+    val genStatic = argValue("-gs")
 
-    if (genPython == null && genKotlin == null && genArduino == null) cliError("Expected at least one target")
+    if (genPython == null && genKotlin == null && genArduino == null && genStatic == null) cliError("Expected at least one target")
     if (arguments.isEmpty()) cliError("Expected output path")
     if (arguments.size < 2) cliError("Expected robot configuration path")
 
@@ -65,7 +87,8 @@ private fun parseArguments(args: Array<String>): GenerationParameters {
             arguments.drop(1).toSet(),
             genArduino,
             genPython,
-            genKotlin
+            genKotlin,
+            genStatic
     )
 }
 

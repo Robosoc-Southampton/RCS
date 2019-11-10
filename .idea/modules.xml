@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/src/main/rcs-bluetooth-adapter/rcs-bluetooth-adapter.iml" filepath="$PROJECT_DIR$/src/main/rcs-bluetooth-adapter/rcs-bluetooth-adapter.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/main/rcs-debug-adapter/rcs-debug-adapter.iml" filepath="$PROJECT_DIR$/src/main/rcs-debug-adapter/rcs-debug-adapter.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/main/rcs-gen/rcs-gen.iml" filepath="$PROJECT_DIR$/src/main/rcs-gen/rcs-gen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/rcs-listen/rcs-listen.iml" filepath="$PROJECT_DIR$/src/main/rcs-listen/rcs-listen.iml" />
     </modules>
   </component>
 </project>

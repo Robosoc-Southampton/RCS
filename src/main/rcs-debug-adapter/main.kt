@@ -13,6 +13,7 @@ fun main(args: Array<String>) {
 
         client.commandSubmitted.connect { command ->
             println("$command")
+            adapter.broadcast(command)
         }
     }
 }

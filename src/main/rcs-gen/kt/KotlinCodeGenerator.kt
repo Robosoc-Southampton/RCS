@@ -57,11 +57,6 @@ class KotlinCodeGenerator(
 
                 mutableField("_adapter", "null as AdapterClient?")
 
-                method("send", "Unit",
-                        "data" to "Command") {
-                    writeLine("_adapter?.send(data)")
-                }
-
                 overrideMethod("connect", "Unit") {
                     block("if (_adapter == null)") {
                         writeLine("val socket = Socket(InetAddress.getByName(addr), port)")
@@ -91,17 +86,17 @@ class KotlinCodeGenerator(
 
                 overrideMethod("wait", "Unit",
                         "delay" to "Milliseconds") {
-                    writeLine("send(WaitCommand(delay))")
+                    writeLine("_adapter?.send(WaitCommand(delay))")
                 }
 
                 overrideMethod("forward", "Unit",
                         "distance" to "Millimetres") {
-                    writeLine("send(ForwardCommand(distance))")
+                    writeLine("_adapter?.send(ForwardCommand(distance))")
                 }
 
                 overrideMethod("turn", "Unit",
                         "angle" to "Degrees") {
-                    writeLine("send(TurnCommand(angle))")
+                    writeLine("_adapter?.send(TurnCommand(angle))")
                 }
 
                 overrideMethod("call", "Unit",
@@ -110,7 +105,7 @@ class KotlinCodeGenerator(
                         "method" to "MethodID",
                         "methodIndex" to "Int",
                         "parameters" to "List<ComponentValue>") {
-                    writeLine("send(CallCommand(component, componentIndex, method, methodIndex, parameters))")
+                    writeLine("_adapter?.send(CallCommand(component, componentIndex, method, methodIndex, parameters))")
                 }
             }
         }

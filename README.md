@@ -1,3 +1,9 @@
+# Warning
+
+Everything here is extremely experimental and changes entirely very often because I'm an indecisive fuck and keep changing my mind about how things should work.
+
+Basically ignore everything until this notice goes away.
+
 # RCS
 
 RCS aims to simplify the control of a robot by generating code and providing

@@ -7,14 +7,15 @@ typealias Milliseconds = Float
 typealias Millimetres = Float
 typealias Degrees = Float
 
-typealias ComponentID = String
-typealias MethodID = String
 /** A value given to components as attributes or method parameters. */
 typealias ComponentValue = Int
 
-data class Location(val x: Millimetres = 0.mm, val y: Millimetres = x)
-data class Direction(val dx: Millimetres = 0.mm, val dy: Millimetres = dx)
-data class RobotPosition(val location: Location, val direction: Direction = Direction(0.mm, 1.mm))
+/** A 2D position vector. */
+data class PositionVec2D(val x: Millimetres = 0.mm, val y: Millimetres = x)
+/** A 2D direction vector. */
+data class DirectionVec2D(val dx: Millimetres = 0.mm, val dy: Millimetres = dx)
+/** A 2D position and direction. */
+data class RobotPosition(val location: PositionVec2D, val direction: DirectionVec2D = DirectionVec2D(0.mm, 1.mm))
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,35 +38,38 @@ val Int.rad: Degrees get() = this * 180 / Math.PI.toFloat()
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-operator fun Location.plus(direction: Direction)
-        = Location(x + direction.dx, y + direction.dy)
+operator fun PositionVec2D.plus(direction: DirectionVec2D)
+        = PositionVec2D(x + direction.dx, y + direction.dy)
 
-operator fun Location.minus(location: Location)
-        = Direction(x - location.x, y - location.y)
+operator fun PositionVec2D.minus(location: PositionVec2D)
+        = DirectionVec2D(x - location.x, y - location.y)
 
-operator fun Direction.times(scale: Millimetres)
-        = Direction(dx * scale, dy * scale)
+operator fun DirectionVec2D.times(scale: Float)
+        = DirectionVec2D(dx * scale, dy * scale)
 
-val Direction.length: Millimetres
+val DirectionVec2D.length: Millimetres
     get() = sqrt(dx * dx + dy * dy)
 
-val Direction.angle: Degrees
+val DirectionVec2D.angle: Degrees
     get() = atan2(dy, dx) * 180 / Math.PI.toFloat()
 
-fun Direction.normalise()
+fun DirectionVec2D.normalise()
         = this * (1 / length)
 
-fun Direction.rotate(theta: Degrees): Direction {
+fun DirectionVec2D.rotate(theta: Degrees): DirectionVec2D {
     if (theta == 90.deg)
-        return Direction(-dy, dx)
+        return DirectionVec2D(-dy, dx)
 
     if (theta == (-90).deg)
-        return Direction(dy, -dx)
+        return DirectionVec2D(dy, -dx)
 
     val sinT = sin(theta / 180 * Math.PI)
     val cosT = cos(theta / 180 * Math.PI)
 
-    return Direction((dx * cosT - dy * sinT).toFloat(), (dx * sinT + dy * cosT).toFloat())
+    return DirectionVec2D(
+            (dx * cosT - dy * sinT).toFloat(),
+            (dx * sinT + dy * cosT).toFloat()
+    )
 }
 
 fun RobotPosition.forward(distance: Millimetres)
@@ -79,46 +83,42 @@ fun RobotPosition.rotate(angle: Degrees)
 val jsonEncodeMilliseconds: JSONEncoder<Milliseconds> = jsonEncodeNumber
 val jsonEncodeMillimetres: JSONEncoder<Millimetres> = jsonEncodeNumber
 val jsonEncodeDegrees: JSONEncoder<Degrees> = jsonEncodeNumber
-val jsonEncodeComponentID: JSONEncoder<ComponentID> = jsonEncodeString
-val jsonEncodeMethodID: JSONEncoder<MethodID> = jsonEncodeString
 val jsonEncodeComponentValue: JSONEncoder<ComponentValue> = jsonEncodeInteger
 
 val jsonDecodeMilliseconds: JSONDecoder<Milliseconds> = jsonDecodeNumber
 val jsonDecodeMillimetres: JSONDecoder<Millimetres> = jsonDecodeNumber
 val jsonDecodeDegrees: JSONDecoder<Degrees> = jsonDecodeNumber
-val jsonDecodeComponentID: JSONDecoder<ComponentID> = jsonDecodeString
-val jsonDecodeMethodID: JSONDecoder<MethodID> = jsonDecodeString
 val jsonDecodeComponentValue: JSONDecoder<ComponentValue> = jsonDecodeInteger
 
-val jsonEncodeLocation: JSONEncoder<Location> = jsonEncodeObject { location ->
+val jsonEncodePositionVec2D: JSONEncoder<PositionVec2D> = jsonEncodeObject { location ->
     "x" - location.x / jsonEncodeMillimetres
     "y" - location.y / jsonEncodeMillimetres
 }
 
-val jsonEncodeDirection: JSONEncoder<Direction> = jsonEncodeObject { direction ->
+val jsonEncodeDirectionVec2D: JSONEncoder<DirectionVec2D> = jsonEncodeObject { direction ->
     "dx" - direction.dx / jsonEncodeMillimetres
     "dy" - direction.dy / jsonEncodeMillimetres
 }
 
 val jsonEncodeRobotPosition: JSONEncoder<RobotPosition> = jsonEncodeObject { position ->
-    "location" - position.location / jsonEncodeLocation
-    "direction" - position.direction / jsonEncodeDirection
+    "location" - position.location / jsonEncodePositionVec2D
+    "direction" - position.direction / jsonEncodeDirectionVec2D
 }
 
-val jsonDecodeLocation: JSONDecoder<Location> = jsonDecodeObject {
+val jsonDecodePositionVec2D: JSONDecoder<PositionVec2D> = jsonDecodeObject {
     val x = "x" / jsonDecodeMillimetres
     val y = "y" / jsonDecodeMillimetres
-    Location(x, y)
+    PositionVec2D(x, y)
 }
 
-val jsonDecodeDirection: JSONDecoder<Direction> = jsonDecodeObject {
+val jsonDecodeDirectionVec2D: JSONDecoder<DirectionVec2D> = jsonDecodeObject {
     val dx = "dx" / jsonDecodeMillimetres
     val dy = "dy" / jsonDecodeMillimetres
-    Direction(dx, dy)
+    DirectionVec2D(dx, dy)
 }
 
 val jsonDecodeRobotPosition: JSONDecoder<RobotPosition> = jsonDecodeObject {
-    val location = "location" / jsonDecodeLocation
-    val direction = "direction" / jsonDecodeDirection
+    val location = "location" / jsonDecodePositionVec2D
+    val direction = "direction" / jsonDecodeDirectionVec2D
     RobotPosition(location, direction)
 }

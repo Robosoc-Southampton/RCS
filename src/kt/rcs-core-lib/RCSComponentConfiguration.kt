@@ -2,7 +2,7 @@
 /** Configuration of a component type, e.g. a servo. */
 data class RCSComponentConfiguration(
         /** Name of the component */
-        val name: ComponentID,
+        val name: String,
         /** Attributes of the component (i.e. parameters/configuration) */
         val attributes: List<RCSComponentAttributeDefinition>,
         /** Methods that may be called upon an instance of this component type. */
@@ -24,7 +24,7 @@ data class RCSComponentAttributeDefinition(
 /** Definition of a method on a component type. */
 data class RCSComponentMethodDefinition(
         /** Name of the method. */
-        val name: MethodID,
+        val name: String,
         /** Names of the parameters to this method. */
         val parameters: List<String>,
         /** Whether the method returns any information. */

@@ -72,14 +72,21 @@ open class AbstractRobotController(
         })
     }
 
+    fun disconnect() {
+        client.disconnect()
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+
     private val client = TCPConnectionClient.connect(host, port)
 
     init {
-        client.received(::decodeMessage)
-
         val message = client.receive()
+        client.received(::decodeMessage)
         decodeMessage(message)
     }
+
+    ////////////////////////////////////////////////////////////////////////////
 
     private fun decodeMessage(message: TCPMessage) {
         val json = try { jsonParse(message.content) }
@@ -93,25 +100,4 @@ open class AbstractRobotController(
             }
         }
     }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-fun main() {
-    val controller = AbstractRobotController("localhost", AdapterServer.DEFAULT_PORT)
-
-    println(controller.position)
-
-    controller.positionChanged.connect {
-        println("Position changed to $it")
-    }
-
-    controller.wait(200.ms)
-    controller.forward(1000.mm)
-    controller.turn(360.deg)
-    controller.call("led1", 0, "on", 1, listOf())
-
-    controller.position(RobotPosition(PositionVec2D(100.mm, 1000.mm)))
-
-    println(controller.position)
 }

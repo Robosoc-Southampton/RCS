@@ -43,7 +43,7 @@ class ArgumentParser internal constructor(private val name: String, private val 
         return ProgramArguments(results)
     }
 
-    private fun printUsage() {
+    fun printUsage() {
         System.err.flush()
         System.out.flush()
         println("Usage: $name")
@@ -70,11 +70,16 @@ class ProgramArguments(private val results: MutableMap<String, List<String>>) {
     fun optionalValue(name: String) = results[name]?.get(0)
     fun values(name: String) = results[name]!!
     fun optionalValues(name: String) = results[name]
+    fun flag(name: String) = results[name] != null
 }
 
 class ArgumentParserBuilder internal constructor() {
     fun switch(name: String, shorthand: String = "-$name", count: Int? = 0, optional: Boolean = false, description: String = name) {
         switches.add(Switch(name, shorthand, count, optional, description))
+    }
+
+    fun flag(name: String, shorthand: String = "-$name", description: String) {
+        switch(name, shorthand, count = 0, optional = true, description = description)
     }
 
     internal fun build(name: String): ArgumentParser {

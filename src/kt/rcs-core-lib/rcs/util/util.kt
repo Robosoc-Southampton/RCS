@@ -9,3 +9,7 @@ fun Set<RCSComponentConfiguration>.toInfoSet()
 /** Get the info object for a robot configuration, given a set of components. */
 fun RCSRobotConfiguration.toInfo(componentSet: RCSComponentInfoSet)
         = RCSRobotInfo(this, componentSet)
+
+/** Get the info object for a robot configuration, given a set of components. */
+fun RCSComponentConfiguration.toInfo()
+        = RCSComponentInfo(this)

@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" name="json-kt-dev" level="application" />
+    <orderEntry type="library" exported="" name="tcputil" level="application" />
   </component>
 </module>

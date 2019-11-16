@@ -1,3 +1,13 @@
+package rcs
+
+import JSONDecoder
+import JSONEncoder
+import jsonDecodeInteger
+import jsonDecodeNumber
+import jsonDecodeObject
+import jsonEncodeInteger
+import jsonEncodeNumber
+import jsonEncodeObject
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin

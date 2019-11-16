@@ -1,3 +1,4 @@
+package rcs.definition
 
 class RCSRobotInfo(
         val configuration: RCSRobotConfiguration,

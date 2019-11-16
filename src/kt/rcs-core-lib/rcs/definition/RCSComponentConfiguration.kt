@@ -1,3 +1,6 @@
+package rcs.definition
+
+import rcs.ComponentValue
 
 /** Configuration of a component type, e.g. a servo. */
 data class RCSComponentConfiguration(

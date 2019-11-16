@@ -1,5 +1,8 @@
+package rcs.definition
 
-/** Definition of a robot's component set. */
+import rcs.ComponentValue
+
+/** Definition of a robot'rcs.getS component set. */
 data class RCSRobotConfiguration(
         /** Name of the robot. */
         val name: String,
@@ -16,7 +19,7 @@ data class RCSRobotComponent(
         /** Identifier for this component. */
         val name: String,
         /** List of attributes of this component. Should match the component
-         *  type definition's attributes. */
+         *  type definition'rcs.getS attributes. */
         val attributes: List<RCSRobotComponentAttribute>,
         /** Meta information e.g. "primary-motor-controller". */
         val tags: List<String>

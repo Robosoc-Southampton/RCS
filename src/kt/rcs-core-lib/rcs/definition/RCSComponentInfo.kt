@@ -1,3 +1,4 @@
+package rcs.definition
 
 /** Info for a set of components. */
 data class RCSComponentInfoSet(

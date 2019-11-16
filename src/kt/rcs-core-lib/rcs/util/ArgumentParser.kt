@@ -1,3 +1,5 @@
+package rcs.util
+
 import kotlin.system.exitProcess
 
 class ArgumentParser internal constructor(private val name: String, private val switches: List<Switch>) {
@@ -14,12 +16,13 @@ class ArgumentParser internal constructor(private val name: String, private val 
         switches.forEach { switch ->
             val index = arguments.indexOf(switch.shorthand)
 
-            if (index == -1 && switch.count == null) {
-                results[switch.name] = listOf()
-            }
-            else if (index == -1 && !switch.optional) {
-                System.err.println("Expected '${switch.name}' argument ('${switch.shorthand}')")
-                errored = true
+            if (index == -1) {
+                if (switch.count == null)
+                    results[switch.name] = listOf()
+                else if (!switch.optional) {
+                    System.err.println("Expected '${switch.name}' argument ('${switch.shorthand}')")
+                    errored = true
+                }
             }
             else if (switch.count != null && arguments.size - index - 1 < switch.count) {
                 System.err.println("Expected '${switch.count}' parameters to argument '${switch.name}' ('${switch.shorthand}')")
@@ -49,7 +52,7 @@ class ArgumentParser internal constructor(private val name: String, private val 
             if (switch.optional) print("[")
             print(switch.shorthand)
             if (switch.count == 1) print(" <${switch.name}>")
-            if (switch.count == null) print(" <${switch.name}s...>")
+            if (switch.count == null) print(" <${switch.name}rcs.getS...>")
             else if (switch.count > 1) print((1 .. switch.count).joinToString("") { " <${switch.name} $it>" })
             if (switch.optional) print("]")
             println(" - ${switch.description}")
@@ -63,7 +66,10 @@ class ArgumentParser internal constructor(private val name: String, private val 
 }
 
 class ProgramArguments(private val results: MutableMap<String, List<String>>) {
-    operator fun get(name: String) = results[name]
+    fun value(name: String) = results[name]!![0]
+    fun optionalValue(name: String) = results[name]?.get(0)
+    fun values(name: String) = results[name]!!
+    fun optionalValues(name: String) = results[name]
 }
 
 class ArgumentParserBuilder internal constructor() {
@@ -84,11 +90,11 @@ fun main(args: Array<String>) {
     val parser = ArgumentParser.create("rcs-gen") {
         switch("output path", "-o", count = 1,
                 description = "Path where the folder should be generated.")
-        switch("static routine", "-s", count = 1, optional = true,
+        switch("static routine", "-rcs.getS", count = 1, optional = true,
                 description = "File containing a static routine.")
     }
 
     val result = parser.parse(args)
 
-    print(result["output path"])
+    print(result.value("output path"))
 }

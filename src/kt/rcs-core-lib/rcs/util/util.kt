@@ -1,3 +1,6 @@
+package rcs.util
+
+import rcs.definition.*
 
 /** Create an RCSComponentInfoSet given a set of component configurations. */
 fun Set<RCSComponentConfiguration>.toInfoSet()

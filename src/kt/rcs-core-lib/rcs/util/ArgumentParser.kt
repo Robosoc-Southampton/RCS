@@ -77,7 +77,7 @@ class ArgumentParserBuilder internal constructor() {
         switches.add(Switch(name, shorthand, count, optional, description))
     }
 
-    fun build(name: String): ArgumentParser {
+    internal fun build(name: String): ArgumentParser {
         return ArgumentParser(name, switches)
     }
 

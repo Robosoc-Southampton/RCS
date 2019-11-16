@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/out/mlem/kt/out.iml" filepath="$PROJECT_DIR$/out/mlem/kt/out.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/kt/rcs-core-lib/rcs-core-lib.iml" filepath="$PROJECT_DIR$/src/kt/rcs-core-lib/rcs-core-lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/kt/rcs-debug-adapter/rcs-debug-adapter.iml" filepath="$PROJECT_DIR$/src/kt/rcs-debug-adapter/rcs-debug-adapter.iml" />
     </modules>
   </component>
 </project>

@@ -61,7 +61,7 @@ val DirectionVec2D.length: Millimetres
     get() = sqrt(dx * dx + dy * dy)
 
 val DirectionVec2D.angle: Degrees
-    get() = atan2(dy, dx) * 180 / Math.PI.toFloat()
+    get() = atan2(-dx, dy) * 180 / Math.PI.toFloat()
 
 fun DirectionVec2D.normalise()
         = this * (1 / length)

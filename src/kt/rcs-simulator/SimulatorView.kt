@@ -30,7 +30,7 @@ class SimulatorView: Canvas(WIDTH, HEIGHT) {
     private val context = graphicsContext2D!!
 
     companion object {
-        const val WIDTH = 1080.0
+        const val WIDTH = 1280.0
         const val HEIGHT = 720.0
     }
 }

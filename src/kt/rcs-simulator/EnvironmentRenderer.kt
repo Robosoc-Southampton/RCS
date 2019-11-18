@@ -66,4 +66,6 @@ class EnvironmentRenderer(
             context.restore()
         }
     }
+
+    fun draw(robots: List<SimulatedRobot>) = robots.forEach(this::draw)
 }

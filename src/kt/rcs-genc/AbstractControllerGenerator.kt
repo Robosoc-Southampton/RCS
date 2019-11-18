@@ -1,6 +1,5 @@
 import rcs.definition.RCSRobotInfo
-import java.nio.file.Files
-import java.nio.file.Paths
+import rcs.util.writeFile
 
 abstract class AbstractControllerGenerator(
         val robot: RCSRobotInfo
@@ -10,8 +9,7 @@ abstract class AbstractControllerGenerator(
     abstract val fileExtension: String
 
     fun generate(path: String) {
-        Files.write(Paths.get(path, "$robotCodeName.$fileExtension"),
-                getClassContent().toByteArray())
+        writeFile("$path/$robotCodeName.$fileExtension", getClassContent())
     }
 
     abstract fun getClassContent(): String

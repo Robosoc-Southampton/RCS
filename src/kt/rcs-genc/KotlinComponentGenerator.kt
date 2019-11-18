@@ -20,7 +20,7 @@ class KotlinComponentGenerator(component: RCSComponentInfo)
     }
 }
 
-const val COMPONENT_TEMPLATE = """package component
+private const val COMPONENT_TEMPLATE = """package component
         
 import rcs.adapter.AbstractRobotController
 import rcs.ComponentValue

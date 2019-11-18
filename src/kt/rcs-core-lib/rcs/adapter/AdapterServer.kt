@@ -2,6 +2,8 @@ package rcs.adapter
 
 import TCPConnectionServer
 
+// TODO: docstrings
+
 class AdapterServer(port: Int) {
     private val connected: MutableList<(AdapterServerClient) -> Unit> = mutableListOf()
     private val server = TCPConnectionServer(port)

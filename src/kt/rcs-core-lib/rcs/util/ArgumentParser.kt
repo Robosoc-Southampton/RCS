@@ -2,6 +2,8 @@ package rcs.util
 
 import kotlin.system.exitProcess
 
+// TODO: docstrings
+
 class ArgumentParser internal constructor(private val name: String, private val switches: List<Switch>) {
     fun parse(args: Array<String>): ProgramArguments {
         val arguments = args.toMutableList()

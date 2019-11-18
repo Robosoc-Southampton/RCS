@@ -1,6 +1,5 @@
 import rcs.definition.RCSComponentInfo
-import java.nio.file.Files
-import java.nio.file.Paths
+import rcs.util.writeFile
 
 abstract class AbstractComponentGenerator(
         val component: RCSComponentInfo
@@ -10,8 +9,7 @@ abstract class AbstractComponentGenerator(
     abstract val fileExtension: String
 
     fun generate(path: String) {
-        Files.write(Paths.get(path, "$componentCodeName.$fileExtension"),
-                getClassContent().toByteArray())
+        writeFile("$path/$componentCodeName.$fileExtension", getClassContent())
     }
 
     abstract fun getClassContent(): String

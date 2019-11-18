@@ -13,6 +13,8 @@ import observables.Observable
 import observables.Signal
 import rcs.*
 
+// TODO: docstrings
+
 class AdapterServerClient internal constructor(
         private val client: TCPConnectionClient
 ) {

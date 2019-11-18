@@ -33,7 +33,7 @@ class ArgumentParser internal constructor(private val name: String, private val 
             else {
                 val p = arguments.drop(index).drop(1).take(switch.count ?: arguments.size - index - 1)
                 results[switch.name] = p
-                repeat(p.size) { arguments.removeAt(index) }
+                repeat(1 + p.size) { arguments.removeAt(index) }
             }
         }
 
@@ -42,7 +42,7 @@ class ArgumentParser internal constructor(private val name: String, private val 
             exitProcess(1)
         }
 
-        return ProgramArguments(results)
+        return ProgramArguments(results, arguments)
     }
 
     fun printUsage() {
@@ -67,7 +67,10 @@ class ArgumentParser internal constructor(private val name: String, private val 
     }
 }
 
-class ProgramArguments(private val results: MutableMap<String, List<String>>) {
+class ProgramArguments(
+        private val results: MutableMap<String, List<String>>,
+        val values: List<String>
+) {
     fun value(name: String) = results[name]!![0]
     fun optionalValue(name: String) = results[name]?.get(0)
     fun values(name: String) = results[name]!!

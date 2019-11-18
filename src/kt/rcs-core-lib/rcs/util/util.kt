@@ -19,6 +19,6 @@ fun RCSComponentConfiguration.toInfo()
 /** Write content to a file, creating required directories. */
 fun writeFile(file: String, content: String) {
     val path = Paths.get(file)
-    Files.createDirectories(path.parent)
+    path.parent?.let { Files.createDirectories(it) }
     Files.write(path, content.toByteArray())
 }

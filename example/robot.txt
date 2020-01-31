@@ -1,0 +1,13 @@
+example-robot
+    servo: RCSServo
+        pin = 2
+
+    motors: L298 #driver
+        ENA = 5
+        ENB = 6
+        IN1 = 8
+        IN2 = 9
+        IN3 = 10
+        IN4 = 11
+
+    led: LED

@@ -1,39 +1,75 @@
-import rcs.loadComponentDefinition
-import rcs.loadRobotConfiguration
-import rcs.util.ArgumentParser
-import rcs.util.toInfo
-import rcs.util.toInfoSet
+import definition.parseComponentDefinition
+import definition.parseFile
+import definition.parseRobotProfile
+import generation.generateCPPRobotHandler
+import generation.prepareCPPDirectory
 
-fun main(args: Array<String>) {
-    val parser = ArgumentParser.create("rcs-gen") {
-        switch("static routine", "-s", 1,
-                optional = true,
-                description = "Path to static routine file")
+fun main(argsArray: Array<String>) {
+    val args = argsArray.toMutableList()
 
-        switch("output path", "-o", 1,
-                optional = false,
-                description = "Folder to place generated code in")
-
-        switch("robot", "-r", 1,
-                optional = false,
-                description = "Path to robot configuration file (JSON)")
-
-        flag("no components", "-nc",
-                description = "Pass this flag to not generate component files")
-
-        switch("components", "-c", null,
-                description = "Paths to component definitions")
+    if (args.contains("-h")) {
+        printUsage()
+        return
     }
-    val arguments = parser.parse(args)
-    val outputPath = arguments.value("output path")
-    val staticRoutinePath = arguments.optionalValue("static routine")
-    val components = arguments.values("components").map(::loadComponentDefinition)
-    val componentSet = components.map { it.configuration} .toSet().toInfoSet()
-    val robot = loadRobotConfiguration(arguments.value("robot"))
-    val generator = ArduinoCodeGenerator(robot.toInfo(componentSet), components.toSet())
 
-    generator.generateArduinoFile(outputPath, staticRoutinePath?.let(::loadStaticRoutine))
+    val arduinoOutput = args.consumeOption("-ao")
+    val pythonOutput = args.consumeOption("-po")
+    val robotProfilePath = args.consumeOption("-r")
+    val componentPaths = (args.consumeVarargOption("-c") ?: listOf())
+            .map { "$it/config.txt" }
 
-    if (!arguments.flag("no components"))
-        generator.generateComponentFiles(outputPath)
+    val components = componentPaths.flatMap { parseFile(it, ::parseComponentDefinition) }
+    val robotProfiles = robotProfilePath?.let { parseFile(it, ::parseRobotProfile) } ?: listOf()
+
+    if (arduinoOutput != null) {
+        prepareCPPDirectory(arduinoOutput, components)
+        robotProfiles.forEach { generateCPPRobotHandler(arduinoOutput, it) }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+private fun printUsage() {
+    println("""
+        Usage: rcs-gen <options>
+        
+        Options:
+            -ao : specify output path for generated Arduino code
+            -po : specify output path for generated Python code
+            -r  : specify robot profile file path
+            -c  : specify component definition paths
+            
+        Example:
+            rcs-gen -ao src/gen/arduino -po src/gen/python
+                    -r etc/primary.txt -c meta/components/* etc/custom-components/*
+    """.trimIndent())
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+private fun MutableList<String>.consumeVarargOption(option: String): List<String>? {
+    val index = indexOf(option)
+
+    if (index != -1) {
+        removeAt(index)
+
+        val results = mutableListOf<String>()
+
+        while (index < size && !this[index].startsWith("-")) {
+            results.add(removeAt(index))
+        }
+
+        return results
+    }
+    return null
+}
+
+private fun MutableList<String>.consumeOption(option: String): String? {
+    val index = indexOf(option)
+
+    return if (index != -1 && index < size - 1) {
+        removeAt(index)
+        removeAt(index)
+    }
+    else null
 }

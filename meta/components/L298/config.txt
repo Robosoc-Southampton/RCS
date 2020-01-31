@@ -1,0 +1,11 @@
+L298
+    attributes
+        ENA
+        IN1
+        IN2
+        IN3
+        IN4
+        ENB
+    methods
+        setLeftMotorSpeed(speed)
+        setRightMotorSpeed(speed)

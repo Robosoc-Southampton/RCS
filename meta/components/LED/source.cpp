@@ -1,4 +1,6 @@
 
+#include "include/LED.h"
+
 void LED::setup(int16_t pin, int16_t initial) {
     this->pin = pin;
 

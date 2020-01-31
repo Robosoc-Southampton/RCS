@@ -12,6 +12,6 @@ for example motor controllers allowing movement control.
 ### Motor controllers
 
 A motor controller must have two methods `setLeftMotorSpeed` and
-`setRightMotorSpeed`, each taking an integer between -128 and 127 inclusive for
+`setRightMotorSpeed`, each taking an integer between -255 and 255 inclusive for
 backwards/forwards. Any numbers outside this range should be clamped within the
 range.

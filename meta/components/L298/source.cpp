@@ -1,4 +1,6 @@
 
+#include "include/L298.h"
+
 namespace {
     void setL298MotorSpeed(int16_t, int16_t, int16_t, int16_t);
 }

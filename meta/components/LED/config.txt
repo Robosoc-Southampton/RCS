@@ -1,9 +1,0 @@
-LED
-    attributes
-        pin = 13
-        initial = 0
-    methods
-        write(on)
-        on()
-        off()
-        toggle()

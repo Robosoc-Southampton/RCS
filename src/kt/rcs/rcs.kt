@@ -19,11 +19,16 @@ fun main(argsArray: Array<String>) {
             .map { "$it/config.txt" }
 
     val components = componentPaths.flatMap { parseFile(it, ::parseComponentDefinition) }
-    val robotProfiles = robotProfilePath?.let { parseFile(it, ::parseRobotProfile) } ?: listOf()
+    val robotProfiles = robotProfilePath?.let { parseFile(it, ::parseRobotProfile) }
 
     if (arduinoOutput != null) {
-        prepareCPPDirectory(arduinoOutput, components)
-        robotProfiles.forEach { generateCPPRobotHandler(arduinoOutput, it) }
+        if (robotProfiles == null)
+            prepareCPPDirectory(arduinoOutput, components)
+
+        robotProfiles?.forEach {
+            prepareCPPDirectory("$arduinoOutput/${it.name}", components)
+            generateCPPRobotHandler("$arduinoOutput/${it.name}", it, components)
+        }
     }
 }
 
@@ -31,17 +36,17 @@ fun main(argsArray: Array<String>) {
 
 private fun printUsage() {
     println("""
-        Usage: rcs-gen <options>
+        Usage: rcs <options>
         
-        Options:
+        Options (all optional):
             -ao : specify output path for generated Arduino code
             -po : specify output path for generated Python code
             -r  : specify robot profile file path
             -c  : specify component definition paths
             
         Example:
-            rcs-gen -ao src/gen/arduino -po src/gen/python
-                    -r etc/primary.txt -c meta/components/* etc/custom-components/*
+            rcs -ao src/gen/arduino -po src/gen/python
+                -r etc/primary.txt -c meta/components/* etc/custom-components/*
     """.trimIndent())
 }
 

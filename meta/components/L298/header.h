@@ -1,23 +1,19 @@
 
 #pragma once
 
-#include <Arduino.h>
+#include "rcs.h"
 
 class L298 {
 public:
     /** Set up the L298, specifying the pins to use. */
-    void setup(int16_t IN1, int16_t IN2,
-               int16_t IN3, int16_t IN4,
-               int16_t ENA, int16_t ENB);
+    void setLeftMotorPins(i16 ENA, i16 IN1, i16 IN2);
+    void setRightMotorPins(i16 ENB, i16 IN3, i16 IN4);
 
-    /** Set the speed of the left motor. Expects an integer in the range -128
-        to 127 inclusive. */
-    void setLeftMotorSpeed(int16_t);
-
-    /** Set the speed of the right motor. Expects an integer in the range -128
-        to 127 inclusive. */
-    void setRightMotorSpeed(int16_t);
+    /** Set the speed of the motors. Expects an integer in the range -255
+        to 255 inclusive. */
+    void setLeftMotorSpeed(i16);
+    void setRightMotorSpeed(i16);
 
 private:
-    int16_t IN1, IN2, IN3, IN4, ENA, ENB;
+    i16 IN1, IN2, IN3, IN4, ENA, ENB;
 };

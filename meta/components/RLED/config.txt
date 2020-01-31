@@ -1,0 +1,6 @@
+RLED
+    attach(pin, state)
+    write(on)
+    on()
+    off()
+    toggle()

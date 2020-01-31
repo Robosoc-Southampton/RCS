@@ -1,11 +1,5 @@
 L298
-    attributes
-        ENA
-        IN1
-        IN2
-        IN3
-        IN4
-        ENB
-    methods
-        setLeftMotorSpeed(speed)
-        setRightMotorSpeed(speed)
+    setLeftMotorPins(ENA, IN1, IN2)
+    setRightMotorPins(ENB, IN3, IN4)
+    setLeftMotorSpeed(speed)
+    setRightMotorSpeed(speed)

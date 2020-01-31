@@ -1,28 +1,28 @@
 
-#include "include/LED.h"
+#include "include/RLED.h"
 
-void LED::setup(int16_t pin, int16_t initial) {
+void RLED::attach(i16 pin, i16 state) {
     this->pin = pin;
 
     pinMode(pin, OUTPUT);
-    write(initial);
+    write(state);
 }
 
-void LED::write(int16_t state) {
+void RLED::write(i16 state) {
     if (state) on(); else off();
 }
 
-void LED::on() {
+void RLED::on() {
     digitalWrite(pin, HIGH);
     state = true;
 }
 
-void LED::off() {
+void RLED::off() {
     digitalWrite(pin, LOW);
     state = false;
 }
 
-void LED::toggle() {
+void RLED::toggle() {
     if (state) off(); else on();
 }
 

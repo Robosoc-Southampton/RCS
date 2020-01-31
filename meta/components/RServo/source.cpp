@@ -1,14 +1,17 @@
 
-#include "include/RCSServo.h"
+#include "include/RServo.h"
 
-void RCSServo::setup(int16_t pin, int16_t initial, int16_t min, int16_t max) {
+void RServo::attach(i16 pin, i16 initial) {
     arduinoServo.attach(pin);
-    this->min = min;
-    this->max = max;
     write(initial);
 }
 
-void RCSServo::write(int16_t value) {
+void RServo::setBounds(i16 min, i16 max) {
+    this->min = min;
+    this->max = max;
+}
+
+void RServo::write(i16 value) {
     if (value < min) value = min;
     if (value > max) value = max;
     arduinoServo.write(value);

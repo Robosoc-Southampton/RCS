@@ -1,8 +1,0 @@
-RCSServo
-    attributes
-        pin
-        initial = 0
-        min = 0
-        max = 180
-    methods
-        *write(angle)

@@ -11,41 +11,32 @@ fun <T> parseFile(file: String, fn: (String, String) -> T): T {
 fun parseComponentDefinition(
         file: String,
         content: String
-): List<RobotComponentDefinition> = content.treeify().map { (_, type, cdata) ->
-    val attrs = cdata.firstOrNull { it.line == "attributes" } ?.children ?: listOf()
-    val meths = cdata.firstOrNull { it.line == "methods" } ?.children ?: listOf()
-    val invalid = cdata.firstOrNull { it.line != "attributes" && it.line != "methods" }
+): List<RobotComponentDefinition> = content.treeify().map { (_, type, meths) ->
     val base = file.split(Regex("[/\\\\]")).dropLast(1).joinToString("/")
 
-    if (invalid != null) {
-        throw ParseError("Invalid section '${invalid.line}' on line ${invalid.number} of '$file'")
-    }
-
-    val attributes = attrs.map { (_, a, _) ->
-        val parts = a.split("=").map { it.trim() }
-        DefinitionAttribute(parts[0], parts.getOrNull(1)?.toInt())
-    }
-
-    val methods = meths.map { (l, m, _) ->
+    val methods = meths.map { (ln, m, _) ->
         val parts0 = m.split("(")
 
         if (parts0.size != 2) {
-            throw ParseError("Malformed method $m on line $l of '$file'")
+            throw ParseError("Malformed method $m on line $ln of '$file'")
         }
 
         val (name, restUntrimmed) = parts0
         val restTrimmed = if (restUntrimmed.isEmpty() || restUntrimmed.last() != ')')
-            throw ParseError("Malformed method '$name' on line $l of '$file' (expected ')')")
+            throw ParseError("Malformed method '$name' on line $ln of '$file' (expected ')')")
         else restUntrimmed.dropLast(1)
-        val params = restTrimmed.split(",").map { it.trim() }
+        val params = restTrimmed
+                .takeIf { it != "" }
+                ?.split(",")
+                ?.map { p -> p.split("=").map { it.trim() } }
+                ?.map { l -> MethodParameter(l[0], l.getOrNull(1)?.toInt()) }
+                ?: listOf()
 
-        DefinitionMethod(name, params)
+        DefinitionMethod(name.removePrefix("*"), name.startsWith("*"), params)
     }
 
     RobotComponentDefinition(
-            type,
-            "$base/header.h", "$base/source.cpp",
-            methods, attributes)
+            type, "$base/header.h", "$base/source.cpp", methods)
 }
 
 fun parseRobotProfile(
@@ -55,15 +46,6 @@ fun parseRobotProfile(
     val name = d
     val components = children.map { (l, d, cdata) ->
         val parts = d.split(":").map { it.trim() }
-        val attributes = cdata.map { (l, a, _) ->
-            val attrParts = a.split("=").map { it.trim() }
-
-            if (attrParts.size != 2) {
-                throw ParseError("Expected '<name> = <value>' on line $l of '$file'")
-            }
-
-            InstanceAttribute(attrParts[0], attrParts[1].toInt())
-        }
 
         if (parts.size != 2) {
             throw ParseError("Expected '<name>: <type>' on line $l of '$file'")
@@ -72,7 +54,7 @@ fun parseRobotProfile(
         val (name, typeAndTagsJoined) = parts
         val typeAndTags = typeAndTagsJoined.split("#").map { it.trim() }
 
-        RobotComponentInstance(name, typeAndTags[0], typeAndTags.drop(1), attributes)
+        RobotComponentInstance(name, typeAndTags[0], typeAndTags.drop(1))
     }
 
     RobotProfile(name, components)

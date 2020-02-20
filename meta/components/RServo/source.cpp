@@ -1,7 +1,7 @@
 
 #include "include/RServo.h"
 
-void RServo::attach(i16 pin, i16 initial) {
+void RServo::setup(i16 pin, i16 initial) {
     arduinoServo.attach(pin);
     write(initial);
 }

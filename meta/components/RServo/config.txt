@@ -1,4 +1,4 @@
 RServo
-    attach(pin, initial)
+    setup(pin, initial)
     setBounds(min, max)
     write(angle)

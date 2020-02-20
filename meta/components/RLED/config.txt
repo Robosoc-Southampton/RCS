@@ -1,5 +1,5 @@
 RLED
-    attach(pin, state)
+    setup(pin, state)
     write(on)
     on()
     off()

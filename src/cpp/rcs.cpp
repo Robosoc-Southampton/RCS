@@ -38,7 +38,7 @@ i16 rcs::read_serial_int() {
     while (Serial.available() < 2);
     i16 b0 = Serial.read();
     i16 b1 = Serial.read();
-    return b0 << 8 | b1;
+    return b1 << 8 | b0;
 }
 
 void rcs::write_serial_int(i16 data) {

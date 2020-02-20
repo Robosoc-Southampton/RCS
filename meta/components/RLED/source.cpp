@@ -1,7 +1,7 @@
 
 #include "include/RLED.h"
 
-void RLED::attach(i16 pin, i16 state) {
+void RLED::setup(i16 pin, i16 state) {
     this->pin = pin;
 
     pinMode(pin, OUTPUT);

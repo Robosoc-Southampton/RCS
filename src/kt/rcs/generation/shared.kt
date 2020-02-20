@@ -6,13 +6,13 @@ import definition.RobotComponentInstance
 typealias ResolvedComponentInstance = Pair<RobotComponentInstance, RobotComponentDefinition>
 typealias OffsetRobotComponentInstance = Triple<RobotComponentInstance, RobotComponentDefinition, Int>
 
-const val RET_OPCODE_ERROR = 0
-const val RET_OPCODE_NO_RETURN = 1
-const val RET_OPCODE_RETURN = 2
+const val RET_OPCODE_MESSAGE = 0
+const val RET_OPCODE_ERROR = 1
+const val RET_OPCODE_NO_RETURN = 2
+const val RET_OPCODE_RETURN = 3
 
 const val OUT_OPCODE_DELAY = 0
-const val OUT_OPCODE_MOVE = 1
-const val OUT_OPCODE_METHOD_BASE = 8
+const val OUT_OPCODE_METHOD_BASE = 4
 
 fun resolveComponents(
         components: List<RobotComponentInstance>,

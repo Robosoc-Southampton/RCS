@@ -93,10 +93,6 @@ private const val CPP_TEMPLATE = """
 
 // TODO: ISR
 
-void move(i16 precision, i16 l, i16 r) {
-    // TODO
-}
-
 void setup() {
     // TODO: setup ISR
     
@@ -111,12 +107,6 @@ void loop() {
         case $OUT_OPCODE_DELAY:
             p_delay = rcs::read_serial_int();
             delay(p0);
-            break;
-        case $OUT_OPCODE_MOVE:
-            p_precision = rcs::read_serial_int();
-            p_l = rcs::read_serial_int();
-            p_r = rcs::read_serial_int();
-            move(p_precision, p_l, p_r);
             break;
         %CONTROL_LOOP_CASES
     }

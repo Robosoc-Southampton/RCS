@@ -6,7 +6,7 @@
 
 class RServo {
 public:
-    void attach(i16 pin, i16 initial);
+    void setup(i16 pin, i16 initial);
     void setBounds(i16 min, i16 max);
     void write(i16 value);
 

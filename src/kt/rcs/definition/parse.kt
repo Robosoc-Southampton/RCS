@@ -51,10 +51,9 @@ fun parseRobotProfile(
             throw ParseError("Expected '<name>: <type>' on line $l of '$file'")
         }
 
-        val (name, typeAndTagsJoined) = parts
-        val typeAndTags = typeAndTagsJoined.split("#").map { it.trim() }
+        val (name, type) = parts
 
-        RobotComponentInstance(name, typeAndTags[0], typeAndTags.drop(1))
+        RobotComponentInstance(name, type)
     }
 
     RobotProfile(name, components)

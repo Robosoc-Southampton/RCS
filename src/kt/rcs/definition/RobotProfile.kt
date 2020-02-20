@@ -9,6 +9,5 @@ data class RobotProfile(
 
 data class RobotComponentInstance(
         val name: String,
-        val type: ComponentType,
-        val tags: List<InstanceTag>
+        val type: ComponentType
 )

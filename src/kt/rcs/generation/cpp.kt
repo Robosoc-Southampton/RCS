@@ -31,7 +31,7 @@ fun generateCPPRobotHandler(
         components: List<RobotComponentDefinition>
 ) {
     val content = generateCPPContent(robot, components)
-    Files.write(Paths.get(path, "${robot.name}.ino"), content.toByteArray())
+    writeFileOverwriting(path, "${robot.name}.ino", content)
 }
 
 private fun readLocalResource(resource: String) =

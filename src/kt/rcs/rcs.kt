@@ -2,6 +2,7 @@ import definition.parseComponentDefinition
 import definition.parseFile
 import definition.parseRobotProfile
 import generation.generateCPPRobotHandler
+import generation.generatePython
 import generation.prepareCPPDirectory
 
 fun main(argsArray: Array<String>) {
@@ -28,6 +29,12 @@ fun main(argsArray: Array<String>) {
         robotProfiles?.forEach {
             prepareCPPDirectory("$arduinoOutput/${it.name}", components)
             generateCPPRobotHandler("$arduinoOutput/${it.name}", it, components)
+        }
+    }
+
+    if (pythonOutput != null) {
+        robotProfiles?.forEach {
+            generatePython("$pythonOutput/${it.name}", it, components)
         }
     }
 }

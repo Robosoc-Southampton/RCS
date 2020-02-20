@@ -2,6 +2,8 @@ package generation
 
 import definition.RobotComponentDefinition
 import definition.RobotComponentInstance
+import java.nio.file.Files
+import java.nio.file.Paths
 
 typealias ResolvedComponentInstance = Pair<RobotComponentInstance, RobotComponentDefinition>
 typealias OffsetRobotComponentInstance = Triple<RobotComponentInstance, RobotComponentDefinition, Int>
@@ -13,6 +15,13 @@ const val RET_OPCODE_RETURN = 3
 
 const val OUT_OPCODE_DELAY = 0
 const val OUT_OPCODE_METHOD_BASE = 4
+
+fun writeFileOverwriting(path: String, file: String, content: String) {
+    val p = Paths.get(path, file)
+    Files.createDirectories(Paths.get(path))
+    if (Files.exists(p)) Files.delete(p)
+    Files.write(p, content.toByteArray())
+}
 
 fun resolveComponents(
         components: List<RobotComponentInstance>,

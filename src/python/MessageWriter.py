@@ -24,18 +24,3 @@ class MessageWriter:
     def waitForLast(self):
         if self.__lastFuture is not None:
             self.__lastFuture.wait()
-
-
-import time
-
-bt = BluetoothInterface("98:D3:32:11:17:5F", None)
-m = MessageWriter(bt)
-m.send(11, 13, 0)
-m.send(13)
-time.sleep(1)
-m.send(14)
-time.sleep(1)
-m.send(13)
-time.sleep(1)
-m.send(14)
-m.waitForLast()

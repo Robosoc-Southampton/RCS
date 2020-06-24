@@ -1,0 +1,6 @@
+MD25
+    setup()
+    setLeftMotorSpeed(speed)
+    setRightMotorSpeed(speed)
+    *readLeftEncoder()
+    *readRightEncoder()

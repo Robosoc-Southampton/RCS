@@ -1,14 +1,14 @@
-import bluetooth
+import serial
 from threading import Lock
 from ErrorHandler import ErrorHandler
 
 
-class BluetoothInterface:
+class SerialInterface:
     """ Facilitates writing messages to a bluetooth device. """
 
-    def __init__(self, mac, err: ErrorHandler):
-        self.__mac = mac
-        self.__sock = None
+    def __init__(self, port, err: ErrorHandler):
+        self.__port = port
+        self.__ser = None
         self.__connected = False
         self.__connectLock = Lock()
         self.__err = err
@@ -19,11 +19,10 @@ class BluetoothInterface:
 
         if not self.__connected:
             try:
-                self.__sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-                self.__sock.connect((self.__mac, 1))
+                self.__ser = serial.Serial(self.__port, 9600, timeout=0)
                 self.__connected = True
 
-            except bluetooth.btcommon.BluetoothError as e:
+            except Exception as e: # TODO
                 self.__err.handleError(e)
 
         self.__connectLock.release()
@@ -35,7 +34,7 @@ class BluetoothInterface:
         if not self.connect(): return False
 
         try:
-            self.__sock.send(data)
+            self.__ser.write(data)
             return True
         except bluetooth.btcommon.BluetoothError as e:
             self.__err.handleError(e)
@@ -47,7 +46,7 @@ class BluetoothInterface:
         data = b""
 
         while self.connect() and bytes > 0:
-            append = self.__sock.recv(bytes)
+            append = self.__ser.recv(bytes)
             data += append
             bytes -= len(append)
 

@@ -1,4 +1,5 @@
 example-robot
     servo: RServo
-    motors: L298
+    md25: MD25
+    l298: L298
     led: RLED

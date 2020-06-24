@@ -101,7 +101,7 @@ void setup() {
 
 void loop() {
     %CONTROL_LOOP_PARAMS
-    i16 r, p_delay, p_precision, p_l, p_r;
+    i16 rv, p_delay, p_precision, p_l, p_r;
     i16 opcode = rcs::read_serial_int();
     switch (opcode) {
         case $OUT_OPCODE_DELAY:

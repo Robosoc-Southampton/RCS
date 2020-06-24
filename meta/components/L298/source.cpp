@@ -18,17 +18,17 @@ void L298::setLeftMotorPins(i16 ENA, i16 IN1, i16 IN2) {
     digitalWrite(IN2, LOW);
 }
 
-void L298::setRightMotorPins(i16 ENA, i16 IN1, i16 IN2) {
+void L298::setRightMotorPins(i16 ENB, i16 IN3, i16 IN4) {
     this->ENB = ENB;
     this->IN3 = IN3;
-    this->IN3 = IN3;
+    this->IN4 = IN4;
 
     pinMode(ENA, OUTPUT);
     pinMode(IN3, OUTPUT);
-    pinMode(IN3, OUTPUT);
+    pinMode(IN4, OUTPUT);
 
     digitalWrite(IN3, LOW);
-    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, LOW);
 }
 
 void L298::setLeftMotorSpeed(i16 speed) {
